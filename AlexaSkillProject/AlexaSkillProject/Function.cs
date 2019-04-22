@@ -69,13 +69,14 @@ namespace LambdaAlexa
             return skillresponse;
         }
         ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
-        private void GetCollegeInfo(string collegeName)
+        private void GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
+            //need to add the rest of the list items 
         {
             var CollegeName = collegeName.ToLowerInvariant();
             
             collegelist c1 = new collegelist()
             {
-                college = "OU",
+                college = "OU", //change
                 collegetown = "Norman",
                 mascot = "sooners",
                 collegepopulation = 1000000,
