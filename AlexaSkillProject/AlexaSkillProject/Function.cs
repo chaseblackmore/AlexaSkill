@@ -14,10 +14,19 @@ namespace LambdaAlexa
 {
     public class Function
     {
-
+        //List<collegelist> cols = new List<collegelist>();
+        //collegelist c1 = new collegelist()
+        //{
+        //    college = "OU",
+        //    collegetown = "Norman",
+        //    mascot = "sooners",
+        //    collegepopulation = 1000000,
+        //};
+        
         public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
         {
             var request = input.GetRequestType();
+            var output = string.Empty;
             if (request == typeof(IntentRequest))
             {
                 var intent = input.Request as IntentRequest;
@@ -28,16 +37,17 @@ namespace LambdaAlexa
                     context.Logger.LogLine($"The college request was not understood");
                     return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
                 }
-                var collegeinfo = await GetCollegeinfo(collegerequest, context);
+                var collegeinfo = GetCollegeinfo(collegerequest, context);
                 var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
-
+                return MakeSkillResponse(outputtext, true);
 
             }
 
             else
             {
-                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask {collegelist} about Canada", true);
+                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask about Canada", true);
             }
+            
         }
 
         private SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
@@ -47,12 +57,22 @@ namespace LambdaAlexa
                 ShouldEndSession = endsession,
                 OutputSpeech = new PlainTextOutputSpeech { Text = output }
             };
-
+            if (prompt != null)
+            {
+                response.Reprompt = new Reprompt() { OutputSpeech = new PlainTextOutputSpeech() { Text = prompt } };
+            }
+            var skillresponse = new SkillResponse
+            {
+                Response = response,
+                Version = "1.0"
+            };
+            return skillresponse;
         }
-        public async Task<collegelist> GetCollegeinfo(string collegeName, ILambdaContext context)
+        ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
+        private void GetCollegeInfo(string collegeName)
         {
             var CollegeName = collegeName.ToLowerInvariant();
-            List<collegelist> cols = new List<collegelist>();
+            
             collegelist c1 = new collegelist()
             {
                 college = "OU",
@@ -60,7 +80,9 @@ namespace LambdaAlexa
                 mascot = "sooners",
                 collegepopulation = 1000000,
             };
+            List<collegelist> cols = new List<collegelist>();
             cols.Add(c1);
+            
 
         }
 
@@ -120,8 +142,16 @@ namespace LambdaAlexa
             //    col[9].collegepopulation = 10000000;
             //    col[9].mascot = "Mountaineers";
             //}
-            
-            
+
+            //List<collegelist> cols = new List<collegelist>();
+            //collegelist c1 = new collegelist()
+            //{
+            //    college = "OU",
+            //    collegetown = "Norman",
+            //    mascot = "sooners",
+            //    collegepopulation = 1000000,
+            //};
+            //cols.Add(c1);
         }
 
 
