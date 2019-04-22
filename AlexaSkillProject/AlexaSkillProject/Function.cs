@@ -14,102 +14,114 @@ namespace LambdaAlexa
 {
     public class Function
     {
-        
-       static void Main(string[] args)
+
+        public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
+        {
+            var request = input.GetRequestType();
+            if (request == typeof(IntentRequest))
+            {
+                var intent = input.Request as IntentRequest;
+                var collegerequest = intent.Intent.Slots["College"].Value;
+
+                if (collegerequest == null)
+                {
+                    context.Logger.LogLine($"The college request was not understood");
+                    return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
+                }
+                var collegeinfo = await GetCollegeinfo(collegerequest, context);
+                var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
+
+
+            }
+
+            else
+            {
+                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask {collegelist} about Canada", true);
+            }
+        }
+
+        private SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
+        {
+            var response = new ResponseBody
+            {
+                ShouldEndSession = endsession,
+                OutputSpeech = new PlainTextOutputSpeech { Text = output }
+            };
+
+        }
+        public async Task<collegelist> GetCollegeinfo(string collegeName, ILambdaContext context)
+        {
+            var CollegeName = collegeName.ToLowerInvariant();
+            List<collegelist> cols = new List<collegelist>();
+            collegelist c1 = new collegelist()
+            {
+                college = "OU",
+                collegetown = "Norman",
+                mascot = "sooners",
+                collegepopulation = 1000000,
+            };
+            cols.Add(c1);
+
+        }
+
+        static void Main(string[] args)
         {
             //instead of mascot i put the team name, need to fix the population
-            collegelist[] col = new collegelist[9];
-            {
-                col[0].college = "University of Oklahoma";
-                col[0].collegetown = "Norman, Oklahoma";
-                col[0].collegepopulation = 10000000;
-                col[0].mascot = "Sooners";
+            //collegelist[] col = new collegelist[9];
+            //{
+            //    col[0].college = "University of Oklahoma";
+            //    col[0].collegetown = "Norman, Oklahoma";
+            //    col[0].collegepopulation = 10000000;
+            //    col[0].mascot = "Sooners";
 
-                col[1].college = "Baylor University";
-                col[1].collegetown = "Waco, Texas";
-                col[1].collegepopulation = 10000000;
-                col[1].mascot = "Bears";
+            //    col[1].college = "Baylor University";
+            //    col[1].collegetown = "Waco, Texas";
+            //    col[1].collegepopulation = 10000000;
+            //    col[1].mascot = "Bears";
 
-                col[2].college = "Iowa State University";
-                col[2].collegetown = "Ames, Iowa";
-                col[2].collegepopulation = 10000000;
-                col[2].mascot = "Cyclones";
+            //    col[2].college = "Iowa State University";
+            //    col[2].collegetown = "Ames, Iowa";
+            //    col[2].collegepopulation = 10000000;
+            //    col[2].mascot = "Cyclones";
 
-                col[3].college = "Kansas State University";
-                col[3].collegetown = "Manhattan, Kansas";
-                col[3].collegepopulation = 10000000;
-                col[3].mascot = "Wildcats";
+            //    col[3].college = "Kansas State University";
+            //    col[3].collegetown = "Manhattan, Kansas";
+            //    col[3].collegepopulation = 10000000;
+            //    col[3].mascot = "Wildcats";
 
-                col[4].college = "Oklahoma State University";
-                col[4].collegetown = "Stillwater, Oklahoma";
-                col[4].collegepopulation = 10000000;
-                col[4].mascot = "Cowboys";
+            //    col[4].college = "Oklahoma State University";
+            //    col[4].collegetown = "Stillwater, Oklahoma";
+            //    col[4].collegepopulation = 10000000;
+            //    col[4].mascot = "Cowboys";
 
-                col[5].college = "Texas Christian University";
-                col[5].collegetown = "Fort Worth, Texas";
-                col[5].collegepopulation = 10000000;
-                col[5].mascot = "Horned Frogs";
+            //    col[5].college = "Texas Christian University";
+            //    col[5].collegetown = "Fort Worth, Texas";
+            //    col[5].collegepopulation = 10000000;
+            //    col[5].mascot = "Horned Frogs";
 
 
-                col[6].college = "Texas Tech University";
-                col[6].collegetown = "Lubbock, Texas";
-                col[6].collegepopulation = 10000000;
-                col[6].mascot = "Red Raiders";
+            //    col[6].college = "Texas Tech University";
+            //    col[6].collegetown = "Lubbock, Texas";
+            //    col[6].collegepopulation = 10000000;
+            //    col[6].mascot = "Red Raiders";
 
-                col[7].college = "University of Kansas";
-                col[7].collegetown = "Lawrence, Kansas";
-                col[7].collegepopulation = 10000000;
-                col[7].mascot = "Jayhawks";
+            //    col[7].college = "University of Kansas";
+            //    col[7].collegetown = "Lawrence, Kansas";
+            //    col[7].collegepopulation = 10000000;
+            //    col[7].mascot = "Jayhawks";
 
-                col[8].college = "University of Texas";
-                col[8].collegetown = "Austin, Texas";
-                col[8].collegepopulation = 10000000;
-                col[8].mascot = "Longhorns";
+            //    col[8].college = "University of Texas";
+            //    col[8].collegetown = "Austin, Texas";
+            //    col[8].collegepopulation = 10000000;
+            //    col[8].mascot = "Longhorns";
 
-                col[9].college = "West Virginia University";
-                col[9].collegetown = "Morgantown, West Virginia";
-                col[9].collegepopulation = 10000000;
-                col[9].mascot = "Mountaineers";
-            }
+            //    col[9].college = "West Virginia University";
+            //    col[9].collegetown = "Morgantown, West Virginia";
+            //    col[9].collegepopulation = 10000000;
+            //    col[9].mascot = "Mountaineers";
+            //}
             
-            public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
-            {
-                var request = input.GetRequestType();
-                if (request == typeof(IntentRequest))
-                {
-                    var intent = input.Request as IntentRequest;
-                    var collegerequest = intent.Intent.Slots["College"].Value;
-
-                    if (collegerequest == null)
-                    {
-                        context.Logger.LogLine($"The college request was not understood");
-                        return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
-                    }
-                    var collegeinfo = await collegelist(collegerequest, context);
-
-                    
-                }
-
-                else
-                {
-                    return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask {collegelist} about Canada", true);
-                }
-            }
-
-            private SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
-            {
-                var response = new ResponseBody
-                {
-                    ShouldEndSession = endsession,
-                    OutputSpeech = new PlainTextOutputSpeech { Text = output }
-                };
-
-            }
-            private async Task<collegelist> GetCollegeinfo (string collegeName, ILambdaContext context)
-            {
-                CollegeName = collegeName.ToLowerInvariant();
-                var cols = new List<collegelist>();
-            }
+            
         }
 
 
