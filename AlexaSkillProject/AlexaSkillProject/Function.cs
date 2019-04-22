@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
@@ -71,7 +72,44 @@ namespace LambdaAlexa
                 col[9].mascot = "Mountaineers";
             }
             
+            public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
+            {
+                var request = input.GetRequestType();
+                if (request == typeof(IntentRequest))
+                {
+                    var intent = input.Request as IntentRequest;
+                    var collegerequest = intent.Intent.Slots["College"].Value;
 
+                    if (collegerequest == null)
+                    {
+                        context.Logger.LogLine($"The college request was not understood");
+                        return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
+                    }
+                    var collegeinfo = await collegelist(collegerequest, context);
+
+                    
+                }
+
+                else
+                {
+                    return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask {collegelist} about Canada", true);
+                }
+            }
+
+            private SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
+            {
+                var response = new ResponseBody
+                {
+                    ShouldEndSession = endsession,
+                    OutputSpeech = new PlainTextOutputSpeech { Text = output }
+                };
+
+            }
+            private async Task<collegelist> GetCollegeinfo (string collegeName, ILambdaContext context)
+            {
+                CollegeName = collegeName.ToLowerInvariant();
+                var cols = new List<collegelist>();
+            }
         }
 
 
