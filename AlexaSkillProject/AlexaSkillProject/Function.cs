@@ -37,7 +37,7 @@ namespace LambdaAlexa
                     context.Logger.LogLine($"The college request was not understood");
                     return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
                 }
-                var collegeinfo = GetCollegeinfo(collegerequest, context);
+                var collegeinfo = GetCollegeinfo(collegerequest, context); 
                 var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
                 return MakeSkillResponse(outputtext, true);
 
@@ -81,9 +81,90 @@ namespace LambdaAlexa
                 mascot = "sooners",
                 collegepopulation = 1000000,
             };
+            collegelist c2 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c3 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c4 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c5 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c6 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c7 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c8 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c9 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
+            collegelist c10 = new collegelist()
+            {
+                college = "",
+                collegetown = "",
+                mascot = "",
+                collegepopulation = 0,
+
+            };
             List<collegelist> cols = new List<collegelist>();
             cols.Add(c1);
-            
+            cols.Add(c2);
+            cols.Add(c3);
+            cols.Add(c4);
+            cols.Add(c5);
+            cols.Add(c6);
+            cols.Add(c7);
+            cols.Add(c8);
+            cols.Add(c9);
+            cols.Add(c10);
+
 
         }
 
