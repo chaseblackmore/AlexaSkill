@@ -37,7 +37,9 @@ namespace LambdaAlexa
                     context.Logger.LogLine($"The college request was not understood");
                     return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
                 }
-                var collegeinfo = GetCollegeinfo(collegerequest, context); 
+                // var collegeinfo = GetCollegeInfo(collegerequest, context); 
+                var collegeinfo = GetCollegeInfo(collegerequest, context);  //get college list instead??
+                
                 var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
                 return MakeSkillResponse(outputtext, true);
 
@@ -68,89 +70,93 @@ namespace LambdaAlexa
             };
             return skillresponse;
         }
+        //public override GetCollegeInfo(string collegeName, ILambdaContext context)
+
+        //need to add the rest of the list items 
         ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
-        private void GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
-            //need to add the rest of the list items 
+        // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
+        public object GetCollegeInfo(string collegeName, ILambdaContext context)
+
         {
             var CollegeName = collegeName.ToLowerInvariant();
-            
+
             collegelist c1 = new collegelist()
             {
-                college = "OU", //change
-                collegetown = "Norman",
-                mascot = "sooners",
-                collegepopulation = 1000000,
+                college = "University of Oklahoma", //change
+                collegetown = "Norman, Oklahoma",
+                mascot = "Sooners",
+                collegepopulation = 28527,
             };
             collegelist c2 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Baylor Univesity",
+                collegetown = "Waco, Texas",
+                mascot = "Bears",
+                collegepopulation = 17059,
 
             };
             collegelist c3 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Kansas State Univesity",
+                collegetown = "Manhattan, Kansas",
+                mascot = "Wildcats",
+                collegepopulation = 22795,
 
             };
             collegelist c4 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Iowa State University",
+                collegetown = "Ames, Iowa",
+                mascot = "Cyclones",
+                collegepopulation = 36158,
 
             };
             collegelist c5 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Oklahoma State Univesity",
+                collegetown = "Stillwater, Oklahoma",
+                mascot = "Cowboys",
+                collegepopulation = 25295,
 
             };
             collegelist c6 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Texas Christian University",
+                collegetown = "Fort Worth, Texas",
+                mascot = "Horned Frogs",
+                collegepopulation = 10489,
 
             };
             collegelist c7 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Texas Tech University",
+                collegetown = "Lubbock, Texas",
+                mascot = "Red Raiders",
+                collegepopulation = 36996,
 
             };
             collegelist c8 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Unversity of Kansas",
+                collegetown = "Lawrence, Kansas",
+                mascot = "Jayhawks",
+                collegepopulation = 27625,
 
             };
             collegelist c9 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "Univesity of Texas",
+                collegetown = "Austin, Texas",
+                mascot = "Longhorns",
+                collegepopulation = 51525,
 
             };
             collegelist c10 = new collegelist()
             {
-                college = "",
-                collegetown = "",
-                mascot = "",
-                collegepopulation = 0,
+                college = "West Virginia University",
+                collegetown = "Morgantown, West Virginia",
+                mascot = "Mountaineers",
+                collegepopulation = 28406,
 
             };
             List<collegelist> cols = new List<collegelist>();
@@ -164,7 +170,7 @@ namespace LambdaAlexa
             cols.Add(c8);
             cols.Add(c9);
             cols.Add(c10);
-
+            return cols; //not correct reutrn, just made something 
 
         }
 
