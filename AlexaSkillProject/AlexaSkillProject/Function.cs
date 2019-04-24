@@ -42,10 +42,12 @@ namespace LambdaAlexa
                         return MakeSkillResponse("I dont understand", false);
                     }
 
-                   // var collegeinfo =  await GetCollegeInfo(collegeName, collegeTown, ColPop, Mascoot, context);
-                    var collegeinfo = GetCollegeInfo(collegerequested, context);
+                    //var collegeinfo = await GetCollegeinfo(collegerequested,context);'
+                    //var collegeinfo = await GetCollegeinfo(collegerequested, context);
+
+                   var collegeinfo = await GetCollegeInfo(collegeName, context);
                     {
-                        output=$"{}";
+                       // output=$"{}";
                     }
                 }
                 //var intent = input.Request as IntentRequest;
@@ -101,14 +103,13 @@ namespace LambdaAlexa
         //need to add the rest of the list items 
         ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
         // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
-        public object GetCollegeInfo(string collegeName, string collegeTown, string Mascoot, int ColPop, ILambdaContext context)
-
+        //public object GetCollegeInfo(string collegeName, string collegeTown, string Mascoot, int ColPop, ILambdaContext context)
+        private async Task<collegelist> GetCollegeinfo(string collegeName, ILambdaContext context)
         {
             var CollegeName = collegeName.ToLowerInvariant();
-            var coltown = collegeTown.ToLowerInvariant();
-            var mas = Mascoot.ToLowerInvariant();
-            var colpo = ColPop;
-
+           
+            collegelist coooo = await GetCollegeinfo(collegeName,context);
+            collegelist collist = new collegelist();
             collegelist c1 = new collegelist()
             {
                 college = "University of Oklahoma", //change
@@ -189,6 +190,7 @@ namespace LambdaAlexa
 
             };
             List<collegelist> cols = new List<collegelist>();
+            
             cols.Add(c1);
             cols.Add(c2);
             cols.Add(c3);
@@ -199,7 +201,7 @@ namespace LambdaAlexa
             cols.Add(c8);
             cols.Add(c9);
             cols.Add(c10);
-            return cols; //not correct reutrn, just made something 
+            return coooo; //not correct reutrn, just made something 
 
         }
 
