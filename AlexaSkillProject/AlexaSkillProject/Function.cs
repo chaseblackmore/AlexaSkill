@@ -22,6 +22,8 @@ namespace LambdaAlexa
         //    mascot = "sooners",
         //    collegepopulation = 1000000,
         //};
+
+
         
         public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
         {
@@ -30,19 +32,43 @@ namespace LambdaAlexa
             if (request == typeof(IntentRequest))
             {
                 var intent = input.Request as IntentRequest;
-                var collegerequest = intent.Intent.Slots["College"].Value;
-
-                if (collegerequest == null)
+                if (intent.Intent.Name.Equals("CollegeIntent"))
                 {
-                    context.Logger.LogLine($"The college request was not understood");
-                    return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
-                }
-                // var collegeinfo = GetCollegeInfo(collegerequest, context); 
-                var collegeinfo = GetCollegeInfo(collegerequest, context);  //get college list instead??
-                
-                var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
-                return MakeSkillResponse(outputtext, true);
+                    var collegerequested = intent.Intent.Slots["college"].Value;
 
+
+                    if (collegerequested == null)
+                    {
+                        return MakeSkillResponse("I dont understand", false);
+                    }
+
+                   // var collegeinfo =  await GetCollegeInfo(collegeName, collegeTown, ColPop, Mascoot, context);
+                    var collegeinfo = GetCollegeInfo(collegerequested, context);
+                    {
+                        output=$"{}";
+                    }
+                }
+                //var intent = input.Request as IntentRequest;
+                //var collegerequest = intent.Intent.Slots["College"].Value;
+
+                //if (collegerequest == null)
+                //{
+                //    context.Logger.LogLine($"The college request was not understood");
+                //    return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
+                //}
+                //// var collegeinfo = GetCollegeInfo(collegerequest, context); 
+                //var collegeinfo = GetCollegeInfo(collegerequest, context);  //get college list instead??
+                //{
+                //    output = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
+                //}
+                // var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
+
+                //return MakeSkillResponse(outputtext, true);
+                //if (request == typeof(LaunchRequest))
+                //{
+                //    return MakeSkillResponse("Welcome, say the name of a college to get started",false);
+                //}
+                //var collegestuff = await GetCollegeInfo(collegerequest, context);
             }
 
             else
@@ -75,10 +101,13 @@ namespace LambdaAlexa
         //need to add the rest of the list items 
         ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
         // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
-        public object GetCollegeInfo(string collegeName, ILambdaContext context)
+        public object GetCollegeInfo(string collegeName, string collegeTown, string Mascoot, int ColPop, ILambdaContext context)
 
         {
             var CollegeName = collegeName.ToLowerInvariant();
+            var coltown = collegeTown.ToLowerInvariant();
+            var mas = Mascoot.ToLowerInvariant();
+            var colpo = ColPop;
 
             collegelist c1 = new collegelist()
             {
