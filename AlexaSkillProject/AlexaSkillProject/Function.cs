@@ -22,64 +22,13 @@ namespace LambdaAlexa
         //    mascot = "sooners",
         //    collegepopulation = 1000000,
         //};
-        
-        public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
+
+        public async Task<collegelist> GetCollegeinfo(string college, ILambdaContext context)
         {
-            var request = input.GetRequestType();
-            var output = string.Empty;
-            if (request == typeof(IntentRequest))
-            {
-                var intent = input.Request as IntentRequest;
-                var collegerequest = intent.Intent.Slots["College"].Value;
+            var CollegeName = college.ToLowerInvariant();
 
-                if (collegerequest == null)
-                {
-                    context.Logger.LogLine($"The college request was not understood");
-                    return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
-                }
-                // var collegeinfo = GetCollegeInfo(collegerequest, context); 
-                var collegeinfo = GetCollegeInfo(collegerequest, context);  //get college list instead??
-                
-                var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
-                return MakeSkillResponse(outputtext, true);
-
-            }
-
-            else
-            {
-                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask about Canada", true);
-            }
-            
-        }
-
-        private SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
-        {
-            var response = new ResponseBody
-            {
-                ShouldEndSession = endsession,
-                OutputSpeech = new PlainTextOutputSpeech { Text = output }
-            };
-            if (prompt != null)
-            {
-                response.Reprompt = new Reprompt() { OutputSpeech = new PlainTextOutputSpeech() { Text = prompt } };
-            }
-            var skillresponse = new SkillResponse
-            {
-                Response = response,
-                Version = "1.0"
-            };
-            return skillresponse;
-        }
-        //public override GetCollegeInfo(string collegeName, ILambdaContext context)
-
-        //need to add the rest of the list items 
-        ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
-        // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
-        public object GetCollegeInfo(string collegeName, ILambdaContext context)
-
-        {
-            var CollegeName = collegeName.ToLowerInvariant();
-
+            collegelist coooo = await GetCollegeinfo(college, context);
+            collegelist collist = new collegelist();
             collegelist c1 = new collegelist()
             {
                 college = "University of Oklahoma", //change
@@ -160,6 +109,7 @@ namespace LambdaAlexa
 
             };
             List<collegelist> cols = new List<collegelist>();
+
             cols.Add(c1);
             cols.Add(c2);
             cols.Add(c3);
@@ -170,9 +120,90 @@ namespace LambdaAlexa
             cols.Add(c8);
             cols.Add(c9);
             cols.Add(c10);
-            return cols; //not correct reutrn, just made something 
+            return coooo; //not correct reutrn, just made something 
 
         }
+
+        public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
+        {
+            var request = input.GetRequestType();
+            var output = string.Empty;
+            if (request == typeof(IntentRequest))
+            {
+                var intent = input.Request as IntentRequest;
+                if (intent.Intent.Name.Equals("CollegeIntent"))
+                {
+                    var collegerequested = intent.Intent.Slots["college"].Value;
+
+
+                    if (collegerequested == null)
+                    {
+                        return MakeSkillResponse("I dont understand", false);
+                    }
+
+                    //var collegeinfo = await GetCollegeinfo(collegerequested,context);'
+                    //var collegeinfo = await GetCollegeinfo(collegerequested, context);
+
+                    var collegeinfo = await GetCollegeinfo(college, context);
+                    {
+                        // output=$"{}";
+                    }
+                }
+                //var intent = input.Request as IntentRequest;
+                //var collegerequest = intent.Intent.Slots["College"].Value;
+
+                //if (collegerequest == null)
+                //{
+                //    context.Logger.LogLine($"The college request was not understood");
+                //    return MakeSkillResponse("Im sorry, but i didnt understand the college you asked for", false);
+                //}
+                //// var collegeinfo = GetCollegeInfo(collegerequest, context); 
+                //var collegeinfo = GetCollegeInfo(collegerequest, context);  //get college list instead??
+                //{
+                //    output = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
+                //}
+                // var outputtext = $"{collegeinfo.college} the {collegeinfo.mascot} is located in {collegeinfo.collegetown} with a population of {collegeinfo.collegepopulation} students";
+
+                //return MakeSkillResponse(outputtext, true);
+                //if (request == typeof(LaunchRequest))
+                //{
+                //    return MakeSkillResponse("Welcome, say the name of a college to get started",false);
+                //}
+                //var collegestuff = await GetCollegeInfo(collegerequest, context);
+            }
+
+            else
+            {
+                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask about Canada", true);
+            }
+
+        }
+
+        public SkillResponse MakeSkillResponse(string output, bool endsession, string prompt = "Just say, tell me about OU to learn more. To exit, say Exit")
+        {
+            var response = new ResponseBody
+            {
+                ShouldEndSession = endsession,
+                OutputSpeech = new PlainTextOutputSpeech { Text = output }
+            };
+            if (prompt != null)
+            {
+                response.Reprompt = new Reprompt() { OutputSpeech = new PlainTextOutputSpeech() { Text = prompt } };
+            }
+            var skillresponse = new SkillResponse
+            {
+                Response = response,
+                Version = "1.0"
+            };
+            return skillresponse;
+        }
+        //public override GetCollegeInfo(string collegeName, ILambdaContext context)
+
+        //need to add the rest of the list items 
+        ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
+        // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
+        //public object GetCollegeInfo(string collegeName, string collegeTown, string Mascoot, int ColPop, ILambdaContext context)
+        
 
         static void Main(string[] args)
         {
@@ -244,10 +275,10 @@ namespace LambdaAlexa
 
 
         //EXAMPLE stuff
-        private collegelist GetCollegelist(string college, string collegetown, string mascot, int collegepop ,ILambdaContext context)
-        {
-            //return $"{college}, the {mascot} are located in {collegetown} and have a population of {collegepop}";
-        }
+        //private collegelist GetCollegelist(string college, string collegetown, string mascot, int collegepop, ILambdaContext context)
+        //{
+        //    //return $"{college}, the {mascot} are located in {collegetown} and have a population of {collegepop}";
+        //}
 
     }
 }
