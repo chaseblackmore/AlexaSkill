@@ -13,7 +13,7 @@ using Amazon.Lambda.Core;
 namespace LambdaAlexa
 {
     public class Function
-    {
+    { 
         //List<collegelist> cols = new List<collegelist>();
         //collegelist c1 = new collegelist()
         //{
