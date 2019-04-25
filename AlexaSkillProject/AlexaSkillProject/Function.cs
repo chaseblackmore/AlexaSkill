@@ -140,7 +140,7 @@ namespace LambdaAlexa
                     {
                         return MakeSkillResponse("I dont understand", false);
                     }
-
+                     
                     //var collegeinfo = await GetCollegeinfo(collegerequested,context);'
                     //var collegeinfo = await GetCollegeinfo(collegerequested, context);
 
