@@ -20,7 +20,7 @@ namespace LambdaAlexa
 
         
         public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
-        {
+        { 
           //  SkillResponse x = await FunctionHandler(input, context); FROM the "Usage" part of the error above, still did not help
             var request = input.GetRequestType();
             var output = string.Empty;
