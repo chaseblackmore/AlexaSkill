@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
@@ -14,42 +15,61 @@ namespace LambdaAlexa
 {
     public class Function
     {
-        //List<collegelist> cols = new List<collegelist>();
-        //collegelist c1 = new collegelist()
-        //{
-        //    college = "OU",
-        //    collegetown = "Norman",
-        //    mascot = "sooners",
-        //    collegepopulation = 1000000,
-        //};
+        
 
 
         
         public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
         {
+          //  SkillResponse x = await FunctionHandler(input, context); FROM the "Usage" part of the error above, still did not help
             var request = input.GetRequestType();
             var output = string.Empty;
             if (request == typeof(IntentRequest))
             {
-                var intent = input.Request as IntentRequest;
-                if (intent.Intent.Name.Equals("CollegeIntent"))
+                var intentRequest = input.Request as IntentRequest;
+                var collegeRequested = intentRequest?.Intent?.Slots["college"].Value;
+                if (collegeRequested == null)
                 {
-                    var collegerequested = intent.Intent.Slots["college"].Value;
+                    context.Logger.LogLine($"The college requested was not understood");
+                    return MakeSkillResponse("IM sorry but i didnt understand which college you asked for. Please try again", false);
 
-
-                    if (collegerequested == null)
-                    {
-                        return MakeSkillResponse("I dont understand", false);
-                    }
-
-                    //var collegeinfo = await GetCollegeinfo(collegerequested,context);'
-                    //var collegeinfo = await GetCollegeinfo(collegerequested, context);
-
-                   var collegeinfo = await GetCollegeInfo(collegeName, context);
-                    {
-                       // output=$"{}";
-                    }
                 }
+                var collegeinfo = await GetCollegeinfo(collegeRequested, context);
+                output = $"{collegeinfo.college} the {collegeinfo.mascot} are located in {collegeinfo.collegetown} with {collegeinfo.collegepopulation} students ";
+
+                return MakeSkillResponse(output, true);
+
+                
+                
+                    
+                
+
+            }
+            //hey adam
+            //The code below is commented out because we did not want to delete it, it might be useful to resolving problems
+            //    var intent = input.Request as IntentRequest;
+            //    if (intent.Intent.Name.Equals("CollegeIntent"))
+            //    {
+            //        var collegerequested = intent.Intent.Slots["college"].Value;
+
+
+            //        if (collegerequested == null)
+            //        {
+            //            return MakeSkillResponse("I dont understand", false);
+            //        }
+
+            //        //var collegeinfo = await GetCollegeinfo(collegerequested,context);'
+            //        //var collegeinfo = await GetCollegeinfo(collegerequested, context);
+
+            //        var collegeinfo = await GetCollegeinfo(collegeName, context);
+            //        {
+            //            // output=$"{}";
+            //        }
+            //    }
+            //}
+            //else if(request == typeof(IntentRequest))
+            //{
+            //}
                 //var intent = input.Request as IntentRequest;
                 //var collegerequest = intent.Intent.Slots["College"].Value;
 
@@ -71,12 +91,9 @@ namespace LambdaAlexa
                 //    return MakeSkillResponse("Welcome, say the name of a college to get started",false);
                 //}
                 //var collegestuff = await GetCollegeInfo(collegerequest, context);
-            }
+            
 
-            else
-            {
-                return MakeSkillResponse($"I dont know how to handle this intent, please say something like Alexa ask about Canada", true);
-            }
+            
             
         }
 
@@ -98,17 +115,14 @@ namespace LambdaAlexa
             };
             return skillresponse;
         }
-        //public override GetCollegeInfo(string collegeName, ILambdaContext context)
-
-        //need to add the rest of the list items 
-        ///public void collegelist GetCollegeinfo(string collegeName, ILambdaContext context)
-        // public string GetCollegeInfo(string collegeName)  //replaced the line 71 with this line, errors removed. need to see if it actually tests through AWS 
-        //public object GetCollegeInfo(string collegeName, string collegeTown, string Mascoot, int ColPop, ILambdaContext context)
-        private async Task<collegelist> GetCollegeinfo(string collegeName, ILambdaContext context)
+        
+        public async Task<collegelist> GetCollegeinfo(string collegeName, ILambdaContext context) //now getting an error here ????? what
         {
-            var CollegeName = collegeName.ToLowerInvariant();
+            collegeName = collegeName.ToLowerInvariant();
+            var colleges = new List<collegelist>();
+           // var CollegeName = collegeName.ToLowerInvariant();
            
-            collegelist coooo = await GetCollegeinfo(collegeName,context);
+           collegelist coooo = await GetCollegeinfo(collegeName,context);
             collegelist collist = new collegelist();
             collegelist c1 = new collegelist()
             {
@@ -116,6 +130,7 @@ namespace LambdaAlexa
                 collegetown = "Norman, Oklahoma",
                 mascot = "Sooners",
                 collegepopulation = 28527,
+                
             };
             collegelist c2 = new collegelist()
             {
@@ -201,7 +216,11 @@ namespace LambdaAlexa
             cols.Add(c8);
             cols.Add(c9);
             cols.Add(c10);
-            return coooo; //not correct reutrn, just made something 
+            colleges.AddRange(cols);
+           // var bestmatch = (from c in colleges where c.college.ToLowerInvariant() == collegeName select c).FirstOrDefault();
+
+            
+            return bestmatch; //not correct reutrn, just made something 
 
         }
 
